@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jre
+FROM gbatalski/oracle-java8
 MAINTAINER Atlassian Confluence
 
 # Setup useful environment variables

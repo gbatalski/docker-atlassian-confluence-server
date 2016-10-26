@@ -32,6 +32,8 @@ RUN set -x \
     && mkdir -p                           "${CONFLUENCE_INSTALL}/conf" \
     && curl -Ls                           "${CONFLUENCE_DOWNLOAD_URL}" | tar -xz --directory "${CONFLUENCE_INSTALL}" --strip-components=1 --no-same-owner \
     && curl -Ls                           "${MYSQL_DRIVER_DOWNLOAD_URL}" | tar -xz --directory "${CONFLUENCE_INSTALL}/confluence/WEB-INF/lib" --strip-components=1 --no-same-owner "mysql-connector-java-${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}-bin.jar" \
+    && rm                                 "${CONFLUENCE_INSTALL}/confluence/WEB-INF/lib/postgresql-9.2-1002.jdbc4.jar" \
+    && curl -Ls "https://jdbc.postgresql.org/download/postgresql-9.4.1211.jar" -o "${CONFLUENCE_INSTALL}/confluence/WEB-INF/lib/postgresql-9.4.1211.jar" \
     && chmod -R 700                       "${CONFLUENCE_INSTALL}/conf" \
     && chmod -R 700                       "${CONFLUENCE_INSTALL}/temp" \
     && chmod -R 700                       "${CONFLUENCE_INSTALL}/logs" \

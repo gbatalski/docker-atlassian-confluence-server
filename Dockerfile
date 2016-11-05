@@ -4,7 +4,7 @@ MAINTAINER Atlassian Confluence
 # Setup useful environment variables
 ENV CONFLUENCE_HOME     /var/atlassian/application-data/confluence
 ENV CONFLUENCE_INSTALL  /opt/atlassian/confluence
-ENV CONF_VERSION  5.10.8
+ENV CONF_VERSION  6.0.1
 
 LABEL Description="This image is used to start Atlassian Confluence" Vendor="Atlassian" Version="${CONF_VERSION}"
 
@@ -60,6 +60,7 @@ USER ${RUN_USER}:${RUN_GROUP}
 
 # Expose default HTTP connector port.
 EXPOSE 8090
+EXPOSE 8091
 
 # Set volume mount points for installation and home directory. Changes to the
 # home directory needs to be persisted as well as parts of the installation

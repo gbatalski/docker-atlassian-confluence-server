@@ -53,11 +53,6 @@ RUN set -x \
                                           "${CONFLUENCE_INSTALL}/conf/server.xml" \
     && touch -d "@0"                      "${CONFLUENCE_INSTALL}/conf/server.xml"
 
-# Use the default unprivileged account. This could be considered bad practice
-# on systems where multiple processes end up being executed by 'daemon' but
-# here we only ever run one process anyway.
-USER ${RUN_USER}:${RUN_GROUP}
-
 # Expose default HTTP connector port.
 EXPOSE 8090
 EXPOSE 8091
@@ -72,6 +67,11 @@ WORKDIR ${CONFLUENCE_INSTALL}
 
 COPY docker-entrypoint.sh /
 RUN chown ${RUN_USER}:${RUN_GROUP} /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
+
+# Use the default unprivileged account. This could be considered bad practice
+# on systems where multiple processes end up being executed by 'daemon' but
+# here we only ever run one process anyway.
+USER ${RUN_USER}:${RUN_GROUP}
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 

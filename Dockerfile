@@ -65,8 +65,8 @@ VOLUME ["${CONFLUENCE_INSTALL}", "${CONFLUENCE_HOME}"]
 # Set the default working directory as the Confluence installation directory.
 WORKDIR ${CONFLUENCE_INSTALL}
 
-COPY docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
+COPY "docker-entrypoint.sh" "/"
+RUN chmod +x "/docker-entrypoint.sh"
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but

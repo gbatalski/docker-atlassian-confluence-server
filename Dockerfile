@@ -1,17 +1,17 @@
-FROM gbatalski/oracle-java8
+FROM openjdk:8-alpine
 MAINTAINER Atlassian Confluence
 
 # Setup useful environment variables
 ENV CONFLUENCE_HOME     /var/atlassian/application-data/confluence
 ENV CONFLUENCE_INSTALL  /opt/atlassian/confluence
-ENV CONF_VERSION  6.13.0
+ARG CONFLUENCE_VERSION=6.13.0
 
-LABEL Description="This image is used to start Atlassian Confluence" Vendor="Atlassian" Version="${CONF_VERSION}"
+LABEL Description="This image is used to start Atlassian Confluence" Vendor="Atlassian" Version="${CONFLUENCE_VERSION}"																			   
 
-ENV CONFLUENCE_DOWNLOAD_URL https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-${CONF_VERSION}.tar.gz
+ARG CONFLUENCE_DOWNLOAD_URL=https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz
 
-ENV MYSQL_VERSION 5.1.44
-ENV MYSQL_DRIVER_DOWNLOAD_URL https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_VERSION}.tar.gz
+ARG MYSQL_VERSION=5.1.44
+ARG MYSQL_DRIVER_DOWNLOAD_URL=https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_VERSION}.tar.gz
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but
@@ -23,9 +23,7 @@ ENV RUN_GROUP           daemon
 # Install Atlassian Confluence and helper tools and setup initial home
 # directory structure.
 RUN set -x \
-    && apt-get update --quiet \
-    && apt-get install --quiet --yes --no-install-recommends libtcnative-1 xmlstarlet \
-    && apt-get clean \
+    && apk --no-cache add curl xmlstarlet bash ttf-dejavu libc6-compat \
     && mkdir -p                           "${CONFLUENCE_HOME}" \
     && chmod -R 700                       "${CONFLUENCE_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}     "${CONFLUENCE_HOME}" \
@@ -62,8 +60,8 @@ EXPOSE 8091
 # directory due to eg. logs.
 VOLUME ["${CONFLUENCE_INSTALL}/logs", "${CONFLUENCE_HOME}"]
 
-# Set the default working directory as the Confluence installation directory.
-WORKDIR ${CONFLUENCE_INSTALL}
+# Set the default working directory as the Confluence home directory.
+WORKDIR ${CONFLUENCE_HOME}
 
 COPY "docker-entrypoint.sh" "/"
 RUN chmod +x "/docker-entrypoint.sh"
@@ -76,4 +74,4 @@ USER ${RUN_USER}:${RUN_GROUP}
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # Run Atlassian Confluence as a foreground process by default.
-CMD ["./bin/catalina.sh", "run"]
+CMD ${CONFLUENCE_INSTALL}/bin/start-confluence.sh -fg

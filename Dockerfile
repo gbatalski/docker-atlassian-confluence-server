@@ -4,7 +4,7 @@ MAINTAINER Atlassian Confluence
 # Setup useful environment variables
 ENV CONFLUENCE_HOME     /var/atlassian/application-data/confluence
 ENV CONFLUENCE_INSTALL  /opt/atlassian/confluence
-ARG CONFLUENCE_VERSION=6.14.0
+ARG CONFLUENCE_VERSION=6.14.1
 
 LABEL Description="This image is used to start Atlassian Confluence" Vendor="Atlassian" Version="${CONFLUENCE_VERSION}"																			   
 
